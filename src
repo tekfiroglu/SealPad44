@@ -1,0 +1,117 @@
+            #include "raylib.h"
+            #include <string.h>
+            #include <stdio.h>
+
+            char buffer[1024] = "press path to save or open to type path \nenter to leave it";
+            char pathBuffer[256] = "path to save or open";
+            int pathLetterCount = 0;
+            bool pathAktif = false;
+            int letterCount = 0;
+            int scrollY = 0;
+            int scrollX = 0;
+            int main(void) {
+                // you aint readin shi 😂😂
+                SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+                InitWindow(800,600,"SealPad44");
+                InitAudioDevice();
+                Sound mySound = LoadSound("fok.mp3");
+                SetTargetFPS(60);
+
+                Font myFont = LoadFont("ProfaTrial-LightExpanded.ttf");
+
+                while (!WindowShouldClose()) {
+                    BeginDrawing();
+                    Vector2 mousePos = GetMousePosition();
+                    int currentX = GetScreenWidth();
+                    int currentY = GetScreenHeight();
+
+                    ClearBackground(GRAY);
+
+                    Rectangle savebutton = {currentX - 100, 0, 100, 50};
+                    DrawRectangle(currentX - 100, 0, 100, 50, BLUE);
+                    float wheel = GetMouseWheelMove();
+                    if (!IsKeyDown(KEY_LEFT_SHIFT)) {
+                        scrollY += wheel * 20;
+                    }
+                    else {
+                        scrollX += wheel * 20;
+                }
+                    DrawRectangle(0, 0, currentX, 50, BLACK);
+                    Rectangle openRectangle = {currentX - 100, 50, 100, 50};
+                    DrawRectangleRec(openRectangle, BLUE);
+
+                    Vector2 boyutOpen = MeasureTextEx(myFont,"open",32,2);
+                    DrawTextEx(myFont,buffer, (Vector2){scrollX + 20, 55 + scrollY}, 32, 2, BLACK);
+
+                    Vector2 boyut2 = MeasureTextEx(myFont, "yeni yazi", 32, 2);
+                    Vector2 boyut = MeasureTextEx(myFont, "Save", 32, 2);
+                    DrawTextEx(myFont, "open", (Vector2){(currentX - 100) + 50 - (boyutOpen.x / 2), 50 + 25 - (boyutOpen.y / 2)}, 32, 2, WHITE);
+                    bool icindemi = CheckCollisionPointRec(mousePos,savebutton);
+
+                    DrawTextEx(myFont, "save", (Vector2){(currentX - 100) + 50 - (boyut.x / 2), 0 + 25 - (boyut.y / 2)}, 32, 2, RED);
+
+                    DrawTextEx(myFont, pathBuffer, (Vector2){10, 5}, 32, 2, RED);
+                    Rectangle pathbutton = {(currentX - 750) + 50 - (boyut2.x / 2.5), 10, boyut2.x, boyut2.y};
+                    bool pathIcinde = CheckCollisionPointRec(mousePos,pathbutton);
+                    bool openIcinde = CheckCollisionPointRec(mousePos,openRectangle);
+
+                    if (openIcinde && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                        FILE *openfile = fopen(pathBuffer,"r");
+                        if (openfile != NULL) {
+                            letterCount = fread(buffer, 1, sizeof(buffer) - 1, openfile);
+                            buffer[letterCount] = 0;
+                            fclose(openfile);
+                            PlaySound(mySound);
+                        }
+                    }
+                    if (pathIcinde && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                        pathAktif = true;
+
+                    }
+
+                    if (icindemi && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                        FILE *f = fopen(pathBuffer,"w");
+                        fprintf(f, "%s", buffer);
+                        fclose(f);
+                        PlaySound(mySound);
+                    }
+
+                    // input but the scroll thing is up there, if it works dont touch it
+                    int currentKey = GetCharPressed();
+                    if (pathAktif) {
+                        if (currentKey > 0) {
+                        pathBuffer[pathLetterCount] = currentKey;
+                        pathLetterCount++;
+                        pathBuffer[pathLetterCount] = 0;
+                        }
+                        if (IsKeyPressed(KEY_BACKSPACE) && (pathLetterCount > 0)) {
+                            pathLetterCount--;
+                            pathBuffer[pathLetterCount] = 0;
+                        }
+                        if (IsKeyPressed(KEY_ENTER)) {
+                            pathAktif = false;
+                        }
+                    }
+                    if (!pathAktif) {
+                        if (currentKey > 0) {
+                            buffer[letterCount] = currentKey;
+                            letterCount++;
+                            buffer[letterCount] = 0;
+                        }
+                        if (IsKeyPressed(KEY_BACKSPACE) && (letterCount > 0)) {
+                            letterCount--;
+                            buffer[letterCount] = 0;
+                        }
+                        if (IsKeyPressed(KEY_ENTER)) {
+                            buffer[letterCount] = '\n';
+                            letterCount++;
+                            buffer[letterCount] = 0;
+                        }
+                    }
+
+                    EndDrawing();
+
+                }
+                CloseWindow();
+                return 0;
+            }
