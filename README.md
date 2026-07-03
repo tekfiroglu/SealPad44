@@ -12,7 +12,6 @@ A minimal text editor built with raylib, written in C.
 ## Requirements
 - [raylib](https://www.raylib.com/)
 - GCC or Clang
-- A TTF font
 
 ## Build
 
