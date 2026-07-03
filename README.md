@@ -42,7 +42,7 @@ gcc main.c -o sealpad44 $(pkg-config --libs --cflags raylib)
 - Still early WIP, expect bugs
 
 ## Roadmap
-- [ ] Bundle font/sound as local resources
+- [X] Bundle font/sound as local resources
 - [ ] Add buffer bounds checking
 - [ ] Better UI feedback (unsaved changes indicator, etc.)
 
