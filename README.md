@@ -13,16 +13,17 @@ A minimal text editor built with raylib, written in C.
 - [raylib](https://www.raylib.com/)
 - GCC or Clang
 
+
 ## Build
 
 ```bash
-gcc main.c -o sealpad44 -lraylib -lm -lpthread -ldl -lrt -lX11
+gcc FokPad44.c -o sealpad44 -lraylib -lm -lpthread -ldl -lrt -lX11
 ```
 
 Or with `pkg-config`:
 
 ```bash
-gcc main.c -o sealpad44 $(pkg-config --libs --cflags raylib)
+gcc FokPad44.c -o sealpad44 $(pkg-config --libs --cflags raylib)
 ```
 
 ## Usage
@@ -42,8 +43,10 @@ gcc main.c -o sealpad44 $(pkg-config --libs --cflags raylib)
 
 ## Roadmap
 - [X] Bundle font/sound as local resources
-- [ ] Add buffer bounds checking
-- [ ] Better UI feedback (unsaved changes indicator, etc.)
+- [X] Add buffer bounds checking
+- [X] Better UI feedback (unsaved changes indicator, etc.)
+- [ ] Cooler buttons
+- [ ] Atleast 1 person using it (hope so)
 
 ## License
 This project is licensed under the MIT License
