@@ -38,7 +38,6 @@ gcc FokPad44.c -o sealpad44 $(pkg-config --libs --cflags raylib)
 - Scroll with the mouse wheel, hold `Shift` to scroll horizontally
 
 ## Known Issues
-- No buffer overflow protection yet — very long text/paths can crash the app
 - Still early WIP, expect bugs
 
 ## Roadmap
